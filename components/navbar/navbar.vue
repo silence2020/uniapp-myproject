@@ -19,8 +19,8 @@
 		</view>
 		<view v-else :style="'height:'+containerHeight+'rpx;'+containerStyle" class="container">
 			<view class="back-icon" @click="backOrHome">
-				<image v-if="pagesCount > 1" src="/static/image/return.png"></image>
-				<image v-else src="../../static/image/home.png"></image>
+				<image v-if="pagesCount > 1" src="/static/images/return.png"></image>
+				<image v-else src="../../static/images/home.png"></image>
 			</view>
 			<view class="nav-title" v-if="titleText">
 				<view :style="'height:'+containerHeight+'rpx;line-height:'+containerHeight+'rpx'">

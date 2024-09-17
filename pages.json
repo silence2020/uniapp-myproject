@@ -34,18 +34,18 @@
 		"borderStyle": "white",
 		"list": [{
 			"pagePath": "pages/index/index",
-			"iconPath": "static/image/in_d.png",
-			"selectedIconPath": "static/image/in_a.png",
+			"iconPath": "static/images/in_d.png",
+			"selectedIconPath": "static/images/in_a.png",
 			"text": "首页"
 		}, {
 			"pagePath": "pages/order/index",
-			"iconPath": "static/image/flower_d.png",
-			"selectedIconPath": "static/image/flower_a.png",
+			"iconPath": "static/images/flower_d.png",
+			"selectedIconPath": "static/images/flower_a.png",
 			"text": "订单"
 		}, {
 			"pagePath": "pages/user/index",
-			"iconPath": "static/image/f_d.png",
-			"selectedIconPath": "static/image/f_a.png",
+			"iconPath": "static/images/f_d.png",
+			"selectedIconPath": "static/images/f_a.png",
 			"text": "用户"
 		}]
 	},
