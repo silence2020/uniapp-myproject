@@ -33,6 +33,13 @@
 			{
 				"navigationBarTitleText" : "医院"
 			}
+		},
+		{
+			"path" : "pages/service/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
+			}
 		}
 	],
 	"tabBar": {

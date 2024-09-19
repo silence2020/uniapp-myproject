@@ -38,6 +38,15 @@
 				</view>
 			</block>
 		</view>
+		
+		<view v-if="navs && navs.length > 0" class="nav-list">
+			<block v-for="(item,index) in navs" :key="index">
+				<view class="nav-item" :data-index="index" @click="onNavTap">
+					<view class="nav-pic"><image :src="item.pic_image_url"></image></view>
+					<view class="nav-text" :style="'color:' + (item.tcolor ? item.tcolor : '')">{{ item.title }}</view>
+				</view>
+			</block>
+		</view>
 	</view>
 </template>
 
@@ -49,6 +58,7 @@
 	//轮播图数据
 	const slides = ref([])
 	const nav2s = ref([])
+	const navs = ref([])
 	onLoad(() => {
 		app.globalData.utils.getUserInfo()
 		app.globalData.utils.request({
@@ -66,6 +76,7 @@
 						console.log(data)
 						slides.value = data.slides
 						nav2s.value = data.nav2s
+						navs.value = data.navs
 					}
 				})
 			}
@@ -78,6 +89,16 @@
 		// 从响应式数据的代理对象获取原始对象
 		console.log(toRaw(nav2s.value))
 		const nav = toRaw(nav2s.value)[e.currentTarget.dataset.index]
+		// 判断是否为内部链接
+		if(nav.stype == 1){
+			uni.navigateTo({
+				url: nav.stype_link
+			})
+		}
+	}
+	
+	const onNavTap = (e) => {
+		const nav = toRaw(navs.value)[e.currentTarget.dataset.index]
 		// 判断是否为内部链接
 		if(nav.stype == 1){
 			uni.navigateTo({
@@ -132,5 +153,33 @@
 	.nav2-pic image {
 	    display: block;
 	    width: 100%;
+	}
+	
+	.nav-list::after {
+	    content: '';
+	    display: block;
+	    height: 0;
+	    line-height: 0;
+	    clear: both;
+	    visibility: hidden;
+	}
+	.nav-item {
+	    float: left;
+	    margin-top: 20rpx;
+	    width: 20%;
+	    text-align: center;
+	    padding: 10rpx 0;
+	}
+	.nav-pic image {
+	    display: block;
+	    margin: 0 auto;
+	    width: 110rpx;
+	    height: 110rpx;
+	}
+	.nav-text {
+	    font-size: 24rpx;
+	    font-weight: bold;
+	    white-space: nowrap;
+	    overflow: hidden;
 	}
 </style>
