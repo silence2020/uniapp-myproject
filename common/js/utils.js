@@ -14,7 +14,7 @@ class Utils {
 						code: response.code
 					},
 					success: data => {
-						console.log(data)
+						//console.log(data)
 					}
 				})
 			}
@@ -35,7 +35,6 @@ class Utils {
 			header: option.header ? option.header : {},
 			method: option.method ? option.method : 'GET',
 			success: (response) => {
-				console.log(response)
 				uni.hideLoading()
 				//后端数据
 				if (response.data.code == 10000) {
