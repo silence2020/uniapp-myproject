@@ -28,16 +28,27 @@
 				</block>
 			</swiper>
 		</view>
+		<!-- 快捷入口 -->
+		<view v-if="nav2s && nav2s.length > 0" class="nav2-list">
+			<block v-for="(item,index) in nav2s" :key="index">
+				<view class="nav2-item" :data-index="index" @click="onNav2Tap">
+					<view class="nav2-pic">
+						<image :src="item.pic_image_url" mode="widthFix"></image>
+					</view>
+				</view>
+			</block>
+		</view>
 	</view>
 </template>
 
 <script setup>
 	import { onLoad } from '@dcloudio/uni-app'
-	import { ref } from 'vue';
+	import { ref, toRaw } from 'vue';
 	//uniapp的api获取app对象
 	const app = getApp()
 	//轮播图数据
 	const slides = ref([])
+	const nav2s = ref([])
 	onLoad(() => {
 		app.globalData.utils.getUserInfo()
 		app.globalData.utils.request({
@@ -54,11 +65,26 @@
 					success: ({data}) => {
 						console.log(data)
 						slides.value = data.slides
+						nav2s.value = data.nav2s
 					}
 				})
 			}
 		})
 	})
+	
+	const onNav2Tap = (e) => {
+		// 获取元素上绑定的data-index值
+		console.log(e.currentTarget.dataset.index)
+		// 从响应式数据的代理对象获取原始对象
+		console.log(toRaw(nav2s.value))
+		const nav = toRaw(nav2s.value)[e.currentTarget.dataset.index]
+		// 判断是否为内部链接
+		if(nav.stype == 1){
+			uni.navigateTo({
+				url: nav.stype_link
+			})
+		}
+	}
 </script>
 
 <style>
@@ -79,5 +105,32 @@
 	.index-swiper swiper-item image {
 		width: 100%;
 		height: 100%;
+	}
+	
+	.nav2-list {
+	    margin: 10rpx 20rpx 0 20rpx;
+	}
+	.nav2-list::after {
+	    content: '';
+	    display: block;
+	    height: 0;
+	    line-height: 0;
+	    clear: both;
+	    visibility: hidden;
+	}
+	.nav2-item {
+	    float: left;
+	    margin-top: 20rpx;
+	    width: 50%;
+	    text-align: center;
+	    box-sizing: border-box;
+	    padding: 0 5rpx;
+	}
+	.nav2-pic {
+	    width: 100%;
+	}
+	.nav2-pic image {
+	    display: block;
+	    width: 100%;
 	}
 </style>

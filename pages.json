@@ -26,6 +26,13 @@
 				"navigationBarTitleText": "搜索",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path" : "pages/hospital/index",
+			"style" : 
+			{
+				"navigationBarTitleText" : "医院"
+			}
 		}
 	],
 	"tabBar": {
