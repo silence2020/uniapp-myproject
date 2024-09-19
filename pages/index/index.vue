@@ -18,11 +18,12 @@
 </template>
 
 <script setup>
-	const toSearch = ()=>{
-		uni.navigateTo({
-			url:'/pages/search/index'
-		})
-	}
+	import {onLoad} from '@dcloudio/uni-app' 
+	//uniapp的api获取app对象
+	const app = getApp()
+	onLoad(()=>{
+		app.globalData.utils.getUserInfo()
+	})
 </script>
 
 <style>
