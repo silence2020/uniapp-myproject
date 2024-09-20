@@ -47,6 +47,28 @@
 				</view>
 			</block>
 		</view>
+		
+		<view class="weui-cells hosp-list">
+			<view class="weui-cell hosp-item weui-cell_access" 
+			v-for="(item,index) in hospitals" :key="item.id"
+			:data-hid="item.id" @click="toHospital">
+				<view class="weui-cell__hd">
+					<image class="hosp-avatar" mode="aspectFill" :src="item.avatar?item.avatar_url:'../../static/images/avatar.jpg'"></image>
+				</view>
+				<view class="weui-cell__hd">
+					<view>
+						<text class="hosp-name">{{item.name}}</text>
+					</view>
+					<view class="hosp-line">
+						<text class="hosp-rank">{{item.rank}}</text>
+						<text class="hosp-label">{{item.label}}</text>
+					</view>
+					<view class="hosp-line">
+						<text class="hosp-intro">{{item.intro}}</text>
+					</view>
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -59,6 +81,7 @@
 	const slides = ref([])
 	const nav2s = ref([])
 	const navs = ref([])
+	const hospitals = ref([])
 	onLoad(() => {
 		app.globalData.utils.getUserInfo()
 		app.globalData.utils.request({
@@ -77,6 +100,7 @@
 						slides.value = data.slides
 						nav2s.value = data.nav2s
 						navs.value = data.navs
+						hospitals.value = data.hospitals
 					}
 				})
 			}
@@ -105,6 +129,12 @@
 				url: nav.stype_link
 			})
 		}
+	}
+	
+	const toHospital = (e)=>{
+		uni.navigateTo({
+			url:'/pages/hospital/index?hid=' + e.currentTarget.dataset.hid
+		})
 	}
 </script>
 
@@ -181,5 +211,65 @@
 	    font-weight: bold;
 	    white-space: nowrap;
 	    overflow: hidden;
+	}
+	
+	
+	.hosp-list {
+	    margin: 10rpx 0 0 0;
+	    background: none;
+	}
+	.hosp-list::before {
+	    display: none;
+	}
+	.hosp-list::after {
+	    display: none;
+	}
+	
+	.hosp-item {
+	    -webkit-box-align: stretch;
+	    -webkit-align-items: stretch;
+	    align-items: stretch;
+	    padding: 20rpx;
+	    margin: 20rpx;
+	    border-radius: 10rpx;
+	    overflow: hidden;
+	    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.04), 0 1px 6px 0 rgba(0, 0, 0, 0.04);
+	}
+	.hosp-item::before {
+	    display: none;
+	}
+	.hosp-item::after {
+	    display: none;
+	}
+	.hosp-name {
+	    font-weight: bold;
+	    font-size: 34rpx;
+	}
+	.hosp-avatar {
+	    display: block;
+	    width: 200rpx;
+	    height: 180rpx;
+	    border-radius: 10rpx;
+	    overflow: hidden;
+	    margin-right: 20rpx;
+	}
+	.hosp-line {
+	    margin-top: 5rpx;
+	}
+	.hosp-line text {
+	    font-size: 26rpx;
+	}
+	.hosp-rank {
+	    font-weight: bold;
+	    color: #0bb585;
+	    margin-right: 15rpx;
+	}
+	.hosp-label {
+	    font-weight: bold;
+	    color: #0ca7ae;
+	    margin-right: 15rpx;
+	}
+	.hosp-intro {
+	    color: #999999;
 	}
 </style>
