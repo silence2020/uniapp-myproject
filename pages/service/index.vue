@@ -57,6 +57,21 @@
 							</view>
 						</view>
 					</view>
+					
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__hd">
+							<view class="weui-label">就诊时间</view>
+						</view>
+						<view class="weui-cell__bd"></view>
+						<view class="weui-cell__ft weui-cell__ft_in-access">
+							<view>
+								<dtPicker @dtPickerChanged="onStartTimeChanged" 
+								:timestamp="order.starttime"
+								placeholder="请选择就诊时间" />
+							</view>
+						</view>
+					</view>
+					
 				</view>
 			</view>
 		</block>
@@ -121,6 +136,10 @@
 		const value = parseInt(e.detail.value)
 		hospital_index.value = value
 		order.price = toRaw(hospitals.value)[value].service_price
+	}
+	
+	const onStartTimeChanged = (e)=>{
+		order.starttime = e.detail.value
 	}
 </script>
 
