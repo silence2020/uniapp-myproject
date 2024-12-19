@@ -22,13 +22,14 @@
 				</view>
 			</view>
 		</view>
-		
-		
+
+
 		<view class="pub-box">
 			<view class="pub-box-bd">
 				<view class="weui-cell weui-cell_input">
 					<view class="weui-cell__hd">
-						<image class="serv-icon" :src="service.icon_image?service.icon_image_url:'../../static/images/avatar.jpg'"></image>
+						<image class="serv-icon"
+							:src="service.icon_image?service.icon_image_url:'../../static/images/avatar.jpg'"></image>
 					</view>
 					<view class="weui-cell__bd">
 						<text class="serv-name">{{service.name}}</text>
@@ -39,7 +40,7 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<block v-if="service.stype == 10 || service.stype == 15 || service.stype == 20">
 			<view class="pub-box">
 				<view class="pub-box-bd">
@@ -50,14 +51,15 @@
 						<view class="weui-cell__bd"></view>
 						<view class="weui-cell__ft weui-cell__ft_in-access">
 							<view>
-								<picker @change="onHospitalChange" :value="hospital_index" :range="hospitals" range-key="name">
-									<input type="text" :disabled="true" placeholder="请选择要就诊的医院" placeholder-class="vp-placeholder"
-									:value="hospitals[hospital_index].name" />
+								<picker @change="onHospitalChange" :value="hospital_index" :range="hospitals"
+									range-key="name">
+									<input type="text" :disabled="true" placeholder="请选择要就诊的医院"
+										placeholder-class="vp-placeholder" :value="hospitals[hospital_index].name" />
 								</picker>
 							</view>
 						</view>
 					</view>
-					
+
 					<view class="weui-cell weui-cell_input">
 						<view class="weui-cell__hd">
 							<view class="weui-label">就诊时间</view>
@@ -65,32 +67,243 @@
 						<view class="weui-cell__bd"></view>
 						<view class="weui-cell__ft weui-cell__ft_in-access">
 							<view>
-								<dtPicker @dtPickerChanged="onStartTimeChanged" 
-								:timestamp="order.starttime"
-								placeholder="请选择就诊时间" />
+								<dtPicker @dtPickerChanged="onStartTimeChanged" :timestamp="order.starttime"
+									placeholder="请选择就诊时间" />
 							</view>
 						</view>
 					</view>
-					
+
+					<view class="weui-cell weui-cell_input" @click="onClientChange">
+						<view class="weui-cell__hd">
+							<view class="weui-label">就诊人</view>
+						</view>
+						<view class="weui-cell__bd"></view>
+						<view class="weui-cell__ft weui-cell__ft_in-access">
+							<view>
+								<view>
+									<input class="weui-input" placeholder="请选择就诊人" placeholder-class="vp-placeholder"
+										style="text-align: right;" :disabled="true" :value="client.name" type="text" />
+								</view>
+							</view>
+						</view>
+					</view>
+
+					<block v-if="service.stype == 15">
+						<!-- 接送陪诊 -->
+						<view class="weui-cell weui-cell_input">
+							<view class="weui-cell__hd">接送地址</view>
+							<view class="weui-cell__bd">
+								<input class="weui-input" name="receiveAddress" style="text-align: right"
+									placeholder-class="vp-placeholder" placeholder="请填写就诊人所在地址"
+									v-model="order.receiveAddress" />
+							</view>
+						</view>
+					</block>
+
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__hd">联系电话</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" type="number" name="tel" style="text-align: right"
+								placeholder-class="vp-placeholder" placeholder="请填写您的联系电话" v-model="order.tel" />
+						</view>
+					</view>
 				</view>
 			</view>
 		</block>
+		<view class="pub-box">
+			<view class="pub-box-tt">服务需求</view>
+			<view class="pub-box-bd">
+				<view class="weui-cell weui-cell_input">
+					<view class="weui-cell__bd">
+						<textarea name="demand" auto-height placeholder="请简单描述您要就诊的科室.."
+							placeholder-class="vp-placeholder" style="min-height: 150rpx" v-model="order.demand" />
+					</view>
+				</view>
+			</view>
+		</view>
+
+		<block v-if="service.stype == 30 || service.stype == 40">
+			<!-- 送取结果,代跑取药 -->
+			<view class="pub-box">
+				<view class="pub-box-bd">
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__hd">
+							<view class="weui-label">所在医院</view>
+						</view>
+						<view class="weui-cell__bd"></view>
+						<view class="weui-cell__ft weui-cell__ft_in-access">
+							<view>
+								<picker @change="onHospitalChange" :value="hospital_index" :range="hospitals"
+									range-key="name">
+									<input type="text" :disabled="true" placeholder="请选择就诊所在医院"
+										:value="hospitals[hospital_index].name" placeholder-class="vp-placeholder" />
+								</picker>
+							</view>
+						</view>
+					</view>
+
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__hd">
+							<view class="weui-label">服务时间</view>
+						</view>
+						<view class="weui-cell__bd"></view>
+						<view class="weui-cell__ft weui-cell__ft_in-access">
+							<view>
+								<dtPicker @dtPickerChanged="onStartTimeChanged" :timestamp="order.starttime"
+									placeholder="请选择期望服务时间"></dtPicker>
+							</view>
+						</view>
+					</view>
+
+					<view class="weui-cell weui-cell_input" @click="onAddressChange">
+						<view class="weui-cell__hd">
+							<view class="weui-label">收件信息</view>
+						</view>
+						<view class="weui-cell__bd"></view>
+						<view class="weui-cell__ft weui-cell__ft_in-access">
+							<input class="weui-input" :disabled="true" style="text-align: right"
+								placeholder-class="vp-placeholder" placeholder="请选择收件信息" :value="
+                                                            order.address.userName
+                                                                ? order.address.userName + '(' + order.address.cityName + order.address.countyName + order.address.detailInfo + ')'
+                                                                : ''
+                                                        " />
+							<!-- {{order.address?(order.address.userName+'('+order.address.telNumber+')'):''}} -->
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__hd">联系电话</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" type="number" name="tel" style="text-align: right"
+								placeholder-class="vp-placeholder" placeholder="请填写您的联系电话" v-model="order.tel" />
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<view class="pub-box">
+				<view class="pub-box-tt">服务需求</view>
+				<view class="pub-box-bd">
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__bd">
+							<textarea name="demand" auto-height placeholder="如有其他服务要求请在此填写.."
+								placeholder-class="vp-placeholder" style="min-height: 150rpx" v-model="order.demand" />
+						</view>
+					</view>
+				</view>
+			</view>
+		</block>
+		<block v-if="service.stype == 110">
+			<!-- 上门服务 -->
+			<view class="pub-box">
+				<view class="pub-box-bd">
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__hd">
+							<view class="weui-label">服务时间</view>
+						</view>
+						<view class="weui-cell__bd"></view>
+						<view class="weui-cell__ft weui-cell__ft_in-access">
+							<view>
+								<dtPicker @dtPickerChanged="onStartTimeChanged" :timestamp="order.starttime"
+									placeholder="请选择期望服务时间"></dtPicker>
+							</view>
+						</view>
+					</view>
+
+					<view class="weui-cell weui-cell_input" @click="onClientChange">
+						<view class="weui-cell__hd">服务对象</view>
+						<view class="weui-cell__bd"></view>
+						<view class="weui-cell__ft weui-cell__ft_in-access">
+							<input class="weui-input" :disabled="true" style="text-align: right"
+								placeholder-class="vp-placeholder" placeholder="请选择服务对象" :value="client.name" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__hd">服务地址</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" name="receiveAddress" style="text-align: right"
+								placeholder-class="vp-placeholder" placeholder="请填写服务所在地址"
+								v-model="order.receiveAddress" />
+						</view>
+					</view>
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__hd">联系电话</view>
+						<view class="weui-cell__bd">
+							<input class="weui-input" type="number" name="tel" style="text-align: right"
+								placeholder-class="vp-placeholder" placeholder="请填写您的联系电话" v-model="order.tel" />
+						</view>
+					</view>
+				</view>
+			</view>
+
+			<view class="pub-box">
+				<view class="pub-box-tt">服务需求</view>
+				<view class="pub-box-bd">
+					<view class="weui-cell weui-cell_input">
+						<view class="weui-cell__bd">
+							<textarea name="demand" auto-height placeholder="请简单描述您要就诊的科室.."
+								placeholder-class="vp-placeholder" style="min-height: 150rpx" v-model="order.demand" />
+						</view>
+					</view>
+				</view>
+			</view>
+		</block>
+
+		<view style="height: 300rpx"></view>
+		<!-- 悬浮提交按钮 -->
+		<view class="vp-foot">
+			<view style="background: #ffffff; padding: 20rpx">
+				<view class="xieyi" style="text-align: center">
+					<text :class="'is_xieyi ' + (is_xieyi ? 'is_xieyi_on' : '')" @click="onXieyiChange">我已阅读并同意</text>
+					<navigator :url="cfg.page_xy">《用户协议》</navigator>
+					<text>和</text>
+					<navigator :url="cfg.page_fw">《服务协议》</navigator>
+				</view>
+				<view>
+					<button :class="'btnp ' + (is_xieyi ? '' : 'btnp-disabled')" @click="submit">
+						确认下单
+						<block v-if="order.price > 0">（支付{{ order.price }}元）</block>
+					</button>
+				</view>
+			</view>
+		</view>
+
+		<uni-popup ref="popup" type="center" :is-mask-click="false" background-color="#fff">
+			<view class="popup-content">
+				<view class="group">
+					<input class="uni-input" type="tel" v-model="validMobile.phone" placeholder="手机号" />
+				</view>
+				<view class="group">
+					<input class="uni-input" v-model="validMobile.validCode" placeholder="验证码" />
+					<text class="valid-text" @click="countdownChange">{{countdown.validText}}</text>
+				</view>
+			</view>
+			<view class="btns">
+				<view class="cancal" @click="cancal">取消</view>
+				<view class="ok" @click="ok">确定</view>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
 <script setup>
-	import { onLoad } from '@dcloudio/uni-app'
-	import { ref, reactive, toRaw } from 'vue';
+	import {
+		onLoad
+	} from '@dcloudio/uni-app'
+	import {
+		ref,
+		reactive,
+		toRaw
+	} from 'vue';
 	const app = getApp()
 	onLoad((options) => {
 		// 获取路由参数
 		console.log(options)
 		main_load(options)
 	})
-	
+
 	const service = ref({})
 	const hospitals = ref([])
-	const hospital_index= ref(0)
+	const hospital_index = ref(0)
 	//订单数据
 	const order = reactive({
 		price: '',
@@ -100,24 +313,32 @@
 			cityName: '',
 			countyName: '',
 			detailInfo: ''
-		}
+		},
+		receiveAddress: '',
+		tel: '',
+		demand: ''
 	})
-	const main_load = (options)=>{
+
+	const cfg = reactive({
+		page_xy: '',
+		page_fw: ''
+	})
+	const main_load = (options) => {
 		app.globalData.utils.request({
 			url: '/Service/order',
 			data: {
 				svid: options.svid
 			},
-			success: res=>{
+			success: res => {
 				console.log(res)
 				service.value = res.data.service
 				hospitals.value = res.data.hospitals
 				//默认选中
 				const hospitalsData = toRaw(hospitals.value)
-				if(options.hid > 0){
+				if (options.hid > 0) {
 					//自动选中
-					for(let i=0; i<hospitalsData.length; i++){
-						if(hospitalsData[i].id == options.hid){
+					for (let i = 0; i < hospitalsData.length; i++) {
+						if (hospitalsData[i].id == options.hid) {
 							hospital_index.value = i
 							order.price = hospitalsData[i].service_price
 							break;
@@ -127,22 +348,199 @@
 			}
 		})
 	}
-	
-	const handleTap = ()=>{
-		
+
+	const handleTap = () => {
+
 	}
-	
-	const onHospitalChange = (e)=>{
+
+	const onHospitalChange = (e) => {
 		const value = parseInt(e.detail.value)
 		hospital_index.value = value
 		order.price = toRaw(hospitals.value)[value].service_price
 	}
-	
-	const onStartTimeChanged = (e)=>{
+
+	const onStartTimeChanged = (e) => {
 		order.starttime = e.detail.value
+	}
+
+	const onClientChange = () => {
+		uni.navigateTo({
+			url: '/pages/clients/index?act=select'
+		})
+	}
+
+	//
+	const client = reactive({
+		name: ''
+	})
+	//创建监听全局的自定义事件
+	uni.$on('clientChange', (data) => {
+		client.name = data.name
+		client.id = data.user_id
+		client.sex = data.sex
+		client.age = data.age
+		client.mobile = data.mobile
+	})
+
+	const is_xieyi = ref(false)
+	const onXieyiChange = () => {
+		is_xieyi.value = !is_xieyi.value
+	}
+
+	const onAddressChange = () => {
+		uni.chooseAddress({
+			success: (res) => {
+				console.log(res)
+				const {
+					userName,
+					cityName,
+					countyName,
+					detailInfo
+				} = res
+				order.address.userName = userName
+				order.address.cityName = cityName
+				order.address.countyName = countyName
+				order.address.detailInfo = detailInfo
+			},
+			fail: (res) => {
+				console.log(res)
+			}
+		})
+	}
+
+	const popup = ref()
+	const validMobile = reactive({
+		phone:'',
+		validCode:''
+	})
+	const countdown = reactive({
+		validText:'获取验证码',
+		time:60
+	})
+	
+	const cancal = ()=>{
+		
+	}
+	
+	const ok = ()=>{
+		
+	}
+	
+	let flag = false
+	const countdownChange = ()=>{
+		if(!validMobile.phone){
+			return uni.showToast({
+				title: '请输入手机号',
+				icon: 'none',
+				duration: 1000
+			})
+		}
+		if(flag) return
+		const myTime = setInterval(()=>{
+			if(countdown.time <= 0){
+				countdown.validText = '获取验证码'
+				countdown.time = 60
+				flag = false
+				clearInterval(myTime)
+			}else{
+				countdown.time -= 1
+				countdown.validText = `剩余${countdown.time}s`
+			}
+		},1000)
+		flag = true
+	}
+	const submit = () => {
+		if (!is_xieyi.value) {
+			return uni.showToast({
+				title: '请先阅读并同意用于协议和服务协议',
+				icon: 'none',
+				duration: 1000
+			})
+		}
+
+		const orderData = toRaw(order)
+		const serviceData = toRaw(service.value)
+		const hospitalsData = toRaw(hospitals.value)
+		const clientData = toRaw(client)
+
+		//医院的选择校验
+		if (serviceData.stype < 100) {
+			if (hospital_index.value == 0) {
+				return uni.showToast({
+					title: '请选择医院',
+					icon: 'none',
+					duration: 1000
+				})
+			}
+			orderData.hospital_id = hospitalsData[hospital_index.value].id
+			orderData.hospital_name = hospitalsData[hospital_index.value].name
+		}
+
+		//就诊时间
+		if (!orderData.starttime) {
+			return uni.showToast({
+				title: '请选择时间',
+				icon: 'none',
+				duration: 1000
+			})
+		}
+
+		//陪诊服务-就诊人
+		if (serviceData.stype == 10 || serviceData.stype == 15 || serviceData.stype == 20) {
+			//就诊人验证
+			if (!clientData.id) {
+				return uni.showToast({
+					title: '请选择就诊人',
+					icon: 'none',
+					duration: 1000
+				})
+			}
+			orderData.client = {}
+			orderData.client.age = clientData.age
+			orderData.client.mobile = clientData.mobile
+			orderData.client.name = clientData.name
+			orderData.client.sex = clientData.sex
+		}
+
+		//接送地址的验证
+		if (serviceData.stype = 15) {
+			if (!orderData.receiveAddress) {
+				return uni.showToast({
+					title: '请填写就诊人所在地址',
+					icon: 'none',
+					duration: 1000
+				})
+			}
+		}
+
+		//带跑取药
+		if (serviceData.stype == 30 || serviceData.stype == 40) {
+			//收件地址
+			if (!orderData.address.userName) {
+				return uni.showToast({
+					title: '请选择收件信息',
+					icon: 'none',
+					duration: 1000
+				})
+			}
+		}
+
+		//判断联系电话
+		if (!orderData.tel) {
+			return uni.showToast({
+				title: '请填写联系方式',
+				icon: 'none',
+				duration: 1000
+			})
+		}
+		console.log(orderData, 'orderData')
+		//判断用户是否存在，不存在就进行短信验证
+		if(!uni.getStorageSync('token')){
+			popup.value.open('center')
+		}
 	}
 </script>
 
 <style>
-@import './index.css';
+	@import './index.css';
 </style>
